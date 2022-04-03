@@ -38,12 +38,35 @@ const typeDefs = `
     getAuthors: [Author]
     findAuthor(id: ID!): Author
   }
+
+  type Mutation {
+    createAuthor(name: String!, age: Int!, gender: String!): Author
+  }
 `;
 
 const resolvers = {
   Query: {
     getAuthors: () => authors,
     findAuthor: (obj, { id }) => authors.find(author => author.id === id)
+  },
+
+  Mutation: {
+    createAuthor: (obj, args) => {
+      const id = authors.length + 1;
+      const { name, age, gender } = args;
+      const newAuthor = {
+        id: id,
+        info: {
+          name,
+          age,
+          gender
+        }
+      }
+
+      authors.push(newAuthor);
+
+      return newAuthor;
+    }
   }
 };
 
