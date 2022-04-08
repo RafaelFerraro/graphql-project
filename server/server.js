@@ -39,9 +39,15 @@ const typeDefs = `
     findAuthor(id: ID!): Author
   }
 
+  type DeleteMessage {
+    id: String
+    message: String
+  }
+
   type Mutation {
     createAuthor(name: String!, age: Int!, gender: String!): Author
     updateAuthor(id: String!, name: String, age: Int, gender: String): Author
+    deleteAuthor(id: String!): DeleteMessage
   }
 `;
 
@@ -82,6 +88,20 @@ const resolvers = {
         authors[authorIndex] = author
 
         return author;
+      } else {
+        throw new Error("Author with id '" + id + "' not found");
+      }
+    },
+
+    deleteAuthor: (obj, { id }) => {
+      const author = authors.find(author => author.id == id);
+
+      if (author) {
+        const authorIndex = authors.indexOf(author);
+
+        authors.splice(authorIndex, 1);
+
+        return {id, message: "Author deleted"};
       } else {
         throw new Error("Author with id '" + id + "' not found");
       }
