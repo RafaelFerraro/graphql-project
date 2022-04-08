@@ -41,6 +41,7 @@ const typeDefs = `
 
   type Mutation {
     createAuthor(name: String!, age: Int!, gender: String!): Author
+    updateAuthor(id: String!, name: String, age: Int, gender: String): Author
   }
 `;
 
@@ -66,6 +67,24 @@ const resolvers = {
       authors.push(newAuthor);
 
       return newAuthor;
+    },
+
+    updateAuthor: (obj, { id, name, age, gender }) => {
+      const author = authors.find(author => author.id == id);
+
+      if (author) {
+        const authorIndex = authors.indexOf(author);
+
+        if (name) author.info.name = name;
+        if (age) author.info.age = age;
+        if (gender) author.info.gender = gender;
+
+        authors[authorIndex] = author
+
+        return author;
+      } else {
+        throw new Error("Author with $id not found");
+      }
     }
   }
 };
