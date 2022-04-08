@@ -83,7 +83,7 @@ const resolvers = {
 
         return author;
       } else {
-        throw new Error("Author with $id not found");
+        throw new Error("Author with id '" + id + "' not found");
       }
     }
   }
